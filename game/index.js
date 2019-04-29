@@ -15,23 +15,9 @@ function setup() {
 function draw() {
   background(51);
 
-  if(game.isPaused) {
-    game.paused();
-  }
-
-  if(game.bird.hitEdge) {
-    game.over();
-  }
-
-  if(frameCount % 100 === 0) {
-    game.obstacles.push(new Obstacle())
-  }
-
   game.stats();
   game.update();
   game.checkCollision();
-  game.bird.update();
-  game.bird.show();
 }
 
 

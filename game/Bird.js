@@ -14,7 +14,17 @@ class Bird {
     this.hitEdge = false;
     this.score = 0;
 
-    window.setTimeout(() => this.isImortal = false, 500)
+    window.setTimeout(() => {
+      this.isImortal = false
+    }, 1000)
+  }
+
+  think() {
+    const result = random();
+
+    if(result > 0.5) {
+      this.jump();
+    }
   }
 
   update() {
