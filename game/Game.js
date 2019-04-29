@@ -5,7 +5,7 @@ class Game {
     this.isOver = false;
     this.isPaused = false;
     this.score = 0;
-    this.total = 20;
+    this.total = 100;
   }
 
   init() {
@@ -20,7 +20,7 @@ class Game {
     }
 
     if(!this.birds.active.length) {
-      this.over()
+      this.reset();
     }
 
     if(frameCount % 5 === 0) {
@@ -71,7 +71,6 @@ class Game {
     frameCount = 0;
     this.score = 0;
     this.obstacles = [];
-    this.obstacles.push(new Obstacle())
     this.birds.update();
     this.isOver = false;
     this.isPaused = false;
@@ -112,6 +111,7 @@ class Game {
     textSize(12);
     textAlign(LEFT);
     text(`Score: ${this.score}`, 20, 25);
+    text(`Generation: ${this.birds.generation}`, 20, 40);
   }
 
   overText() {

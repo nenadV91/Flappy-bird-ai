@@ -58,8 +58,20 @@ class NeuralNetwork {
     return this.query(Matrix.fromArray(input));
   }
 
-  mutate(rate) {
+  mutate(rate = 0.1) {
+    this.layers.forEach(layer => {
+      layer.weights.forEach(mutation);
+    })
 
+    function mutation(x) {
+      if(random(1) < rate || 0.2) {
+        let offset = randomGaussian() * 0.5;
+        let newx = x + offset;
+        return newx;
+      } else {
+        return x;
+      }
+    }
   }
 
   clone() {
