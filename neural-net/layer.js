@@ -1,5 +1,6 @@
 class Layer {
   constructor(opts) {
+    this.opts = opts;
     this.inodes = opts.inodes;
     this.onodes = opts.onodes;
     this.activationType = opts.activation || 'sigmoid';
@@ -65,5 +66,13 @@ class Layer {
 
     this.weights.add(this.deltaW);
     this.bias.add(this.gradient);
+  }
+
+  clone() {
+    const clone = new Layer(this.opts);
+    clone.weights = this.weights.clone();
+    clone.bias = this.bias.clone();
+    clone.initActivation();
+    return clone;
   }
 }

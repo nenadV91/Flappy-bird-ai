@@ -11,7 +11,6 @@ function setup() {
   game.init();
 }
 
-
 function draw() {
   background(51);
 
@@ -20,12 +19,7 @@ function draw() {
   game.checkCollision();
 }
 
-
 function keyPressed() {
-  if(keyCode === 32 && !game.isPaused) {
-    game.bird.jump()
-  }
-
   if(keyCode === 82) {
     if(game.isOver) {
       game.reset();

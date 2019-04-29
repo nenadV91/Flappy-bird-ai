@@ -54,27 +54,18 @@ class NeuralNetwork {
     }
   }
 
-  train(input, target) {
-    if(!input) {
-      const error = 'Input parameter is required on train method';
-      throw new Error(error);
-    }
-
-    if(!target) {
-      const error = 'Target parameter is required on train method';
-      throw new Error(error);
-    }
-
-    this.query(Matrix.fromArray(input));
-    this.update(Matrix.fromArray(target));
+  predict(input) {
+    return this.query(Matrix.fromArray(input));
   }
 
-  predict(input) {
-    if(!input) {
-      const error = 'Input parameter is required on predict method';
-      throw new Error(error);
-    }
+  mutate(rate) {
 
-    return this.query(Matrix.fromArray(input));
+  }
+
+  clone() {
+    const clone = new NeuralNetwork();
+    this.layers.forEach(layer => {
+      clone.layers.push(layer.clone())
+    });
   }
 }

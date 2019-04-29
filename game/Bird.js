@@ -1,5 +1,5 @@
 class Bird {
-  constructor() {
+  constructor(brain) {
     this.x = 100;
     this.y = height / 2;
     this.r = 20;
@@ -16,14 +16,49 @@ class Bird {
 
     window.setTimeout(() => {
       this.isImortal = false
-    }, 1000)
+    }, 1000);
+
+    if(brain instanceof NeuralNetwork) {
+      this.brain = brain.clone();
+      this.brain.mutate(0.1);
+    } else {
+      this.brain = this.createBrain();
+    }
   }
 
-  think() {
-    const result = random();
+  createBrain() {
+    const brain = new NeuralNetwork();
+    brain.add(new Layer({ inodes: 5, onodes: 3 }));
+    brain.add(new Layer({ onodes: 4 }));
+    brain.add(new Layer({ onodes: 1 }));
+    return brain;
+  }
 
-    if(result > 0.5) {
-      this.jump();
+  think(obstacles) {
+    let [first] = obstacles;
+    let firstDist = abs(this.x - first.x);
+
+    for(let i = 0; i < obstacles.length; i++) {
+      let obstacle = obstacles[i];
+      let dist = abs(this.x - obstacle.x);
+
+      if(dist < firstDist) {
+        first = obstacle;
+        firstDist = dist;
+      }
+    }
+
+    const input = [];
+    input.push(first.topEdge / height);
+    input.push(first.bottomEdge / height);
+    input.push(first.x / width);
+    input.push(map(this.y, 0, height, 0, 1));
+    input.push(map(this.velocity, -5, 5, 0, 1));
+
+    const [output] = this.brain.predict(input);
+
+    if(output > 0.5) {
+      this.jump()
     }
   }
 

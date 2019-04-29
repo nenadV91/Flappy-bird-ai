@@ -40,7 +40,7 @@ class Game {
         this.removeBird(i);
       }
 
-      bird.think();
+      bird.think(this.obstacles);
       bird.update();
       bird.show();
     }
