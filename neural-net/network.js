@@ -67,5 +67,6 @@ class NeuralNetwork {
     this.layers.forEach(layer => {
       clone.layers.push(layer.clone())
     });
+    return clone;
   }
 }

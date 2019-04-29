@@ -10,10 +10,8 @@ class Game {
 
   init() {
     this.obstacles.push(new Obstacle());
-    for(let i = 0; i < this.total; i++) {
-      const bird = new Bird();
-      this.birds.push(bird);
-    }
+    this.birds = new Population(this.total);
+    this.birds.create(Bird);
   }
 
   update() {
@@ -21,7 +19,7 @@ class Game {
       this.paused();
     }
 
-    if(!this.birds.length) {
+    if(!this.birds.active.length) {
       this.over()
     }
 
@@ -33,11 +31,11 @@ class Game {
       this.obstacles.push(new Obstacle())
     }
 
-    for(let i = this.birds.length - 1; i >= 0; i--) {
-      const bird = this.birds[i];
+    for(let i = this.birds.active.length - 1; i >= 0; i--) {
+      const bird = this.birds.active[i];
 
       if(bird.hitEdge) {
-        this.removeBird(i);
+        this.birds.remove(i);
       }
 
       bird.think(this.obstacles);
@@ -50,12 +48,12 @@ class Game {
     for(let i = this.obstacles.length - 1; i >= 0; i--) {
       const obstacle = this.obstacles[i];
 
-      for(let j = this.birds.length - 1; j >= 0; j--) {
-        const bird = this.birds[j];
+      for(let j = this.birds.active.length - 1; j >= 0; j--) {
+        const bird = this.birds.active[j];
 
         if(!bird.isImortal) {
           if(obstacle.hit(bird)) {
-            this.removeBird(j);
+            this.birds.remove(j);
           }
         }
       }
@@ -69,44 +67,26 @@ class Game {
     }
   }
 
-  removeBird(index) {
-    this.birds.splice(index, 1);
-  }
-
-  stats() {
-    fill(255);
-    noStroke();
-    textSize(12);
-    textAlign(LEFT);
-    text(`Score: ${this.score}`, 20, 25);
-  }
-
   reset() {
     frameCount = 0;
     this.score = 0;
     this.obstacles = [];
-    this.birds = [];
-
     this.obstacles.push(new Obstacle())
-    for(let i = 0; i < this.total; i++) {
-      const bird = new Bird();
-      this.birds.push(bird);
-    }
-
+    this.birds.update();
     this.isOver = false;
     this.isPaused = false;
     loop();
+  }
+
+  pause() {
+    this.isPaused = true;
+    noLoop();
   }
 
   paused() {
     textSize(14);
     this.textStyle();
     text('Paused', width / 2, height / 2);
-  }
-
-  pause() {
-    this.isPaused = true;
-    noLoop();
   }
 
   resume() {
@@ -124,6 +104,14 @@ class Game {
     noStroke();
     fill(color);
     textAlign(pos);
+  }
+
+  stats() {
+    fill(255);
+    noStroke();
+    textSize(12);
+    textAlign(LEFT);
+    text(`Score: ${this.score}`, 20, 25);
   }
 
   overText() {
